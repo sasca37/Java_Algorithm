@@ -85,3 +85,55 @@ public int solution(int n, int k) {
 ```
 
 - poll() 로 맨앞의 인덱스를 꺼내고 offer로 맨 뒤에 붙이는 예제 (공주 구하기)
+
+
+
+### 객체형
+
+- 순서와 같은 추가적인 값이 필요할 경우 class 객체를 통해 선언
+
+```java
+class Person {
+    int id;
+    int priority;
+    public Person(int id, int priority) {
+        this.id = id;
+        this.priority = priority;
+    }
+    
+}
+public class Main {
+    public static void main(String[] args) {
+        Main main = new Main();
+        int n = 5;
+        int m = 2;
+        int[] arr = {60, 50, 70, 80, 90};
+        System.out.println(main.solution(n,m,arr));
+    }
+
+    public int solution(int n, int m, int[] arr) {
+        int answer = 0;
+        Queue<Person> queue = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            queue.offer(new Person(i, arr[i]));
+        }
+        while (!queue.isEmpty()) {
+            Person tmp = queue.poll();
+            for (Person x : queue) {
+                if (x.priority > tmp.priority) {
+                    queue.add(tmp);
+                    tmp = null;
+                    break;
+                }
+            }
+            if (tmp != null) {
+                if (tmp.id==m) return answer;
+                else answer++;
+            }
+        }
+        System.out.println(queue);
+        return answer;
+    }
+}
+```
+

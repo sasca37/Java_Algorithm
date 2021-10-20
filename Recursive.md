@@ -97,3 +97,87 @@ public class Main {
 - 메모이제이션을 사용하여 구한 값은 바로 가져올 수 있도록 처리 하자. 
 - 재귀함수를 사용하는 것 보다는 for문을 사용하는 것이 시간복잡도가 빠르다.
 
+
+## DFS
+
+### 이진트리 순회
+
+```java
+class Node {
+    int data;
+    Node lt, rt;
+
+    public Node(int val) {
+        data = val;
+        lt=rt=null;
+    }
+}
+
+public class Main {
+    Node root;
+    public void DFS(Node root) {
+        if (root == null) return;
+        else {
+//            System.out.print(root.data+" "); //전위 순회
+            DFS(root.lt);
+//            System.out.print(root.data +" "); //중위 순회
+            DFS(root.rt);
+            System.out.print(root.data +" "); //후위 순회 
+        }
+    }
+    public static void main(String[] args) {
+        Main tree = new Main();
+        tree.root = new Node(1);
+        tree.root.lt = new Node(2);
+        tree.root.rt = new Node(3);
+        tree.root.lt.lt = new Node(4);
+        tree.root.lt.rt = new Node(5);
+        tree.root.rt.lt = new Node(6);
+        tree.root.rt.rt = new Node(7);
+        tree.DFS(tree.root);
+    }
+}
+```
+- 전위순회 : 부모 - 왼쪽 자식 - 오른쪽 자식 순서
+- 중위순회 : 왼쪽 자식 - 부모 - 오른쪽 자식 순서
+- 후위순회 : 왼쪽 자식 - 오른쪽 자식 - 부모 순서 
+
+
+
+### 부분 집합 
+
+```java
+public class Main {
+    static int[] chk;
+    static int n;
+    public static void main(String[] args) {
+        Main main = new Main();
+        n = 3;
+        chk = new int[n+1];
+        main.dfs(1);
+    }
+
+    public void dfs(int depth) {
+       if (depth > n) {
+           StringBuilder sb = new StringBuilder();
+           for (int i=1; i<chk.length; i++) {
+               if (chk[i] == 1) sb.append(i+" ");
+           }
+           System.out.println(sb);
+           return;
+       }
+       else {
+           chk[depth] = 1;
+           dfs(depth+1);
+           chk[depth] = 0;
+           dfs(depth+1);
+       }
+    }
+}
+```
+
+
+
+## BFS
+
+- 넓이 우선 탐색 : 레벨 탐색 

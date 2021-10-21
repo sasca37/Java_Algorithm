@@ -339,5 +339,164 @@ public class Main {
 
 
 
+### 그래프 최단 거리
+
+```java
+import java.util.*;
+
+public class Main {
+    static int n, m;
+    static int[] answer;
+    static int[] chk;
+    static ArrayList<ArrayList<Integer>> graph;
+
+    public void bfs(int v) {
+        Queue<Integer> queue = new LinkedList<>();
+        chk[v] = 1;
+        queue.offer(v);
+        while (!queue.isEmpty()) {
+            int cv = queue.poll();
+            for (int nv : graph.get(cv)) {
+                if (chk[nv] == 0) { // 방문 X
+                    chk[nv] = 1;
+                    queue.offer(nv);
+                    answer[nv] = answer[cv] + 1; // 지나온 거리 +1
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        graph = new ArrayList<>();
+        answer = new int[n+1];
+        chk = new int[n+1];
+        for (int i=0; i<=n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int i=0; i<m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph.get(a).add(b);
+        }
+        main.bfs(1);
+        System.out.println(Arrays.toString(answer));
+    }
+}
+```
+
+
+
 ## Graph
+
+- G(V, E)로 표현  (Vertex : 노드, Edge : 간선)
+
+```java
+// 양방향(무방향)그래프 표현  
+graph[a][b] = 1;
+graph[b][a] = 1;
+// 방향 그래프 표현
+graph[a][b] = 1;
+// 가중치 방향 그래프 
+graph[a][b] = c; // a에서 b로 가는 가중치는 c
+```
+
+
+
+### 경로 탐색
+
+```java
+public class Main {
+    static int n, m, answer = 0;
+    static int[][] graph;
+    static int[] chk;
+
+    public void dfs(int v) {
+        if (v==n) answer++;
+        else {
+            for (int i = 1; i <= n; i++) {
+                if (graph[v][i] == 1 && chk[i] == 0) {
+                    chk[i] = 1;
+                    dfs(i);
+                    chk[i] = 0;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        graph = new int[n+1][n+1];
+        chk = new int[n+1];
+        for (int i=0; i<m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph[a][b] = 1;
+        }
+        chk[1] = 1;
+        main.dfs(1);
+        System.out.println(answer);
+    }
+}
+```
+
+- 방향그래프 1번에서 n번으로 가는 모든 경로 수 출력 
+- 메모리를 많이 사용하기 때문에 비효율적이다. 
+
+
+
+### 경로 탐색 - 인접리스트
+
+- 배열 사용이 아닌 List를 이용해 간선이 있는 경우만 담는다.
+
+```java
+import java.util.*;
+
+public class Main {
+    static int n, m, answer = 0;
+    static int[] chk;
+    static ArrayList<ArrayList<Integer>> graph;
+
+    public void dfs(int v) {
+        if (v==n) answer++;
+        else {
+            for (int nv : graph.get(v)) {
+                if (chk[nv] == 0) {
+                    chk[nv] =1;
+                    dfs(nv);
+                    chk[nv]=0;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        graph = new ArrayList<>();
+        for (int i=0; i<=n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        chk = new int[n+1];
+        for (int i=0; i<m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph.get(a).add(b);
+        }
+        chk[1] = 1;
+        main.dfs(1);
+        System.out.println(answer);
+    }
+}
+```
+
+
 

@@ -265,6 +265,133 @@ public class Main {
 
 
 
+### 섬 구하기
+
+```java
+import java.util.*;
+
+class Main {
+    static int answer = 0, n;
+    static int[] dx = {-1, -1, 0, 1, 1, 1, 0, -1};
+    static int[] dy = {0, 1, 1, 1, 0, -1, -1, -1};
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int[][] board = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = sc.nextInt();
+            }
+        }
+        main.chk(board);
+        System.out.println(Arrays.deepToString(board));
+        System.out.println(answer);
+    }
+
+    public void chk(int[][] board) {
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if(board[i][j] == 1) {
+                    answer++;
+                    dfs(board, i,j);
+                }
+            }
+        }
+    }
+
+    public void dfs(int[][] board, int x, int y) {
+        board[x][y] = 0;
+        for (int i=0; i<8; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx>=0 && nx <n && ny >=0 && ny <n && board[nx][ny] == 1) {
+                dfs(board, nx,ny);
+            }
+        }
+    }
+}
+[입력]
+7
+1 1 0 0 0 1 0
+0 1 1 0 1 1 0
+0 1 0 0 0 0 0
+0 0 0 1 0 1 1
+1 1 0 1 1 0 0
+1 0 0 0 1 0 0
+1 0 1 0 1 0 0
+[출력] 5
+```
+
+- 상하좌우, 대각선 까지 연결된 1의 묶음을 섬으로 보고 섬의 개수 구하는 문제 
+
+
+
+### 피자 배달 거리
+
+```java
+import java.util.*;
+
+class Point {
+    public int x, y;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+class Main {
+    static int n,m, len, answer =Integer.MAX_VALUE;
+    static int[] combi;
+    static ArrayList<Point> pz, hs;
+    public void dfs(int level, int start){
+        if(level == m) {
+            int sum = 0;
+            for (Point h : hs) {
+                int dis = Integer.MAX_VALUE;
+                for (int i : combi) {
+                    dis = Math.min(dis, Math.abs(h.x - pz.get(i).x) + Math.abs(h.y - pz.get(i).y));
+                }
+                sum += dis;
+            }
+            answer = Math.min(answer, sum);
+        }
+        else {
+            for (int i=start; i < len; i++) {
+                combi[level] = i;
+                dfs(level+1, i+1);
+            }
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        pz = new ArrayList<>();
+        hs = new ArrayList<>();
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                int tmp = sc.nextInt();
+                if (tmp == 1) hs.add(new Point(i,j));
+                else if (tmp == 2) pz.add(new Point(i,j));
+            }
+        }
+        len = pz.size();
+        combi = new int[m];
+        main.dfs(0,0);
+        System.out.println(answer);
+    }
+
+}
+```
+
+
+
+
+
 ## BFS
 
 
@@ -330,3 +457,146 @@ public class Main {
 ```
 
 - n x n 크기의 미로와 동일한 거리 배열 생성 후 제일 먼저 값이 들어간 값이 최단거리로 측정 
+
+
+
+### 토마토
+
+```java
+import java.util.*;
+
+class Point {
+    public int x, y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    static int[][] board, dis;
+    static int n,m;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static Queue<Point> queue = new LinkedList<>();
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Main main = new Main();
+        m = sc.nextInt();
+        n = sc.nextInt();
+        board = new int[n][m];
+        dis = new int[n][m];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                board[i][j] = sc.nextInt();
+                if(board[i][j] == 1) queue.offer(new Point(i,j));
+            }
+        }
+        main.bfs();
+        boolean flag = true;
+        int answer = Integer.MIN_VALUE;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                if (board[i][j] == 0) flag = false;
+            }
+        }
+        if (flag) {
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<m; j++) {
+                    answer = Math.max(answer, dis[i][j]);
+                }
+            }
+        }
+        else answer = -1;
+        System.out.println(answer);
+    }
+
+    public void bfs() {
+        while (!queue.isEmpty()) {
+            Point tmp = queue.poll();
+            for (int i=0; i<4; i++) {
+                int nx = tmp.x + dx[i];
+                int ny = tmp.y + dy[i];
+                if (nx>=0 && nx <n && ny>=0 && ny <m && board[nx][ny] == 0) {
+                    board[nx][ny] = 1;
+                    queue.offer(new Point(nx,ny));
+                    dis[nx][ny] = dis[tmp.x][tmp.y]+1;
+                }
+            }
+        }
+    }
+}
+[입력]
+6 4
+0 0 -1 0 0 0
+0 0 1 0 -1 0
+0 0 -1 0 0 0
+0 0 0 0 -1 1
+[출력] 4
+```
+
+- 익은 토마토 1, 안익은 토마토 0, 없는 자리 -1 이며, 익은 토마토 주변 상하좌우가 하루에 1개씩 익는 최단 거리 문제 
+
+### 섬 구하기
+
+```java
+import java.util.*;
+
+class Point {
+    public int x, y;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+class Main {
+    static int answer = 0, n;
+    static int[] dx = {-1, -1, 0, 1, 1, 1, 0, -1};
+    static int[] dy = {0, 1, 1, 1, 0, -1, -1, -1};
+    static Queue<Point> queue = new LinkedList<>();
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int[][] board = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                board[i][j] = sc.nextInt();
+            }
+        }
+        main.chk(board);
+        System.out.println(Arrays.deepToString(board));
+        System.out.println(answer);
+    }
+
+    public void chk(int[][] board) {
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if(board[i][j] == 1) {
+                    answer++;
+                    queue.offer(new Point(i,j));
+                    bfs(board);
+                }
+            }
+        }
+    }
+
+    public void bfs(int[][] board) {
+        while (!queue.isEmpty()) {
+            Point tmp = queue.poll();
+            for (int i=0; i<8; i++) {
+                int nx = tmp.x + dx[i];
+                int ny = tmp.y + dy[i];
+                if (nx >=0 && nx <n && ny>=0 && ny <n && board[nx][ny] == 1) {
+                    board[nx][ny] = 0;
+                    queue.offer(new Point(nx,ny));
+                }
+            }
+        }
+    }
+}
+```
+
+- DFS 에 있는 섬 구하기와 동일한 문제 BFS 버전 

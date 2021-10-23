@@ -40,7 +40,7 @@ public class Main {
 
 
 
-## 중복 순열
+### 중복 순열
 
 ```java
 public class Main {
@@ -82,7 +82,7 @@ public class Main {
 
 
 
-## 조합 수 (메모이제이션)
+### 조합 수 (메모이제이션)
 
 ```java
 public class Main {
@@ -114,7 +114,7 @@ public class Main {
 
 
 
-## 수열 추측 
+### 수열 추측 
 
 ```java
 import java.util.*;
@@ -171,7 +171,7 @@ public class Main {
 
 
 
-## 조합 
+### 조합 
 
 ```java
 public class Main {
@@ -209,3 +209,124 @@ public class Main {
 3 4 
 ```
 
+
+
+### 미로 탐색
+
+```java
+public class Main {
+    static int[][] board;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static int answer = 0;
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        board = new int[8][8];
+        for (int i=1; i<=7; i++) {
+            for (int j=1; j<=7; j++) {
+                board[i][j] = sc.nextInt();
+            }
+        }
+        board[1][1] = 1;
+        main.dfs(1,1);
+        System.out.println(answer);
+    }
+
+    public void dfs(int x, int y) {
+        if (x == 7 && y == 7) {
+            answer++;
+        }
+        else {
+            for (int i = 0; i < 4; i++) {
+                int nx = x+dx[i];
+                int ny = y+dy[i];
+                if (nx >= 1  && nx <=7 && ny >=1 && ny <=7 && board[nx][ny] == 0) {
+                    board[nx][ny] = 1;
+                    dfs(nx,ny);
+                    board[nx][ny] = 0;
+                }
+            }
+        }
+    }
+}
+[입력]
+0 0 0 0 0 0 0
+0 1 1 1 1 1 0
+0 0 0 1 0 0 0
+1 1 0 1 0 1 1
+1 1 0 0 0 0 1
+1 1 0 1 1 0 0
+1 0 0 0 0 0 0
+[출력] 8
+```
+
+- 상하좌우 dx, dy 생성 후 dfs 실행 후 벽을 다시 없애주는게 포인트 
+
+
+
+## BFS
+
+
+
+### 미로 최단 거리
+
+```java
+class Point {
+    public int x, y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Main {
+    static int[][] board, dis;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        board = new int[8][8];
+        dis = new int[8][8];
+        for (int i=1; i<=7; i++) {
+            for (int j=1; j<=7; j++) {
+                board[i][j] = sc.nextInt();
+            }
+        }
+        main.bfs(1,1);
+        if (dis[7][7] == 0) System.out.println(-1);
+        else System.out.println(dis[7][7]);
+       
+    }
+
+    public void bfs(int x, int y) {
+        Queue<Point> queue = new LinkedList<>();
+        queue.offer(new Point(x, y));
+        board[x][y] = 1;
+        while(!queue.isEmpty()) {
+            Point tmp = queue.poll();
+            for (int i=0; i<4; i++) {
+                int nx = tmp.x + dx[i];
+                int ny = tmp.y + dy[i];
+                if (nx >=1 && nx <=7 && ny>=1 && ny <= 7 && board[nx][ny] == 0) {
+                    board[nx][ny] = 1;
+                    queue.offer(new Point(nx, ny));
+                    dis[nx][ny] = dis[tmp.x][tmp.y] + 1;
+                }
+            }
+        }
+    }
+}
+[입력]
+0 0 0 0 0 0 0
+0 1 1 1 1 1 0
+0 0 0 1 0 0 0
+1 1 0 1 0 1 1
+1 1 0 1 0 0 0
+1 0 0 0 1 0 0
+1 0 1 0 0 0 0
+[출력] 12
+```
+
+- n x n 크기의 미로와 동일한 거리 배열 생성 후 제일 먼저 값이 들어간 값이 최단거리로 측정 

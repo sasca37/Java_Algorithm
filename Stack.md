@@ -137,3 +137,65 @@ public class Main {
 }
 ```
 
+
+
+### 객체형 순위 
+
+```java
+class Solution {
+    public static void main(String[] args) {
+        int[] priorities = {1,1,9,1,1,1};
+        int location = 0;
+        Solution main = new Solution();
+        System.out.println(main.solution(priorities, location));
+    }
+    public int solution(int[] priorities, int location) {
+        Queue<Pair> queue = new LinkedList<>();
+        int answer = 0;
+
+        for (int i = 0; i < priorities.length; i++) {
+            queue.add(new Pair(i, priorities[i]));
+        }
+
+        while (!queue.isEmpty()) {
+
+            int current = queue.peek().value;
+
+            boolean flag = false;
+
+            for (Pair pair : queue) {
+                if (pair.value > current) {
+                    // System.out.println(pair.value);
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag) {
+                Pair temp = queue.poll();
+                queue.add(temp);
+            }
+            else {
+                answer++;
+                Pair pair = queue.poll();
+
+                if (pair.index == location) {
+                    return answer;
+                }
+            }
+        }
+        return answer;
+    }
+
+    class Pair {
+        int index;
+        int value;
+
+        public Pair(int index, int value) {
+            this.index = index;
+            this.value = value;
+        }
+    }
+}
+```
+

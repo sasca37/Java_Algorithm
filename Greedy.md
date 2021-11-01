@@ -265,3 +265,108 @@ class Main {
 }
 ```
 
+
+
+## 벽돌 쌓기 LIS (최장수열)
+
+```java
+import java.util.*;
+
+class Wall implements Comparable<Wall> {
+    public int width;
+    public int height;
+    public int weight;
+
+    public Wall(int width, int height, int weight) {
+        this.width = width;
+        this.height = height;
+        this.weight = weight;
+    }
+
+
+    @Override
+    public int compareTo(Wall o) {
+        return o.width - this.width;
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<Wall> arr = new ArrayList<>();
+        for (int i=0; i<n; i++) arr.add(new Wall(sc.nextInt(), sc.nextInt(), sc.nextInt()));
+        Collections.sort(arr);
+        int answer = main.solution(arr, n);
+        System.out.println(answer);
+    }
+
+    public int solution(ArrayList<Wall> arr, int n) {
+        int[] dy = new int[n];
+        dy[0] = arr.get(0).height;
+        for (int i=1; i<n; i++) {
+            for (int j=0; j<i; j++) {
+                if (arr.get(j).weight > arr.get(i).weight) {
+                    dy[i] = Math.max(dy[i], dy[j]+arr.get(i).height);
+                }
+            }
+            if (dy[i] == 0) {
+                dy[i] = arr.get(i).height;
+            }
+        }
+        Arrays.sort(dy);
+        return dy[n-1];
+    }
+}
+```
+
+- 조건에 맞춰 벽돌의 최대 높이를 구하는 문제. 
+- 각 배열마다 꼭대기 벽돌로 가정하고 값을 구한다. (최장수열 응용)
+
+
+
+## 냅색 알고리즘 (동전)
+
+```java
+import java.util.*;
+
+class Main {
+    static int n,m;
+    static int[] dy;
+    public static void main(String[] args) {
+        Main main = new Main();
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        m = sc.nextInt();
+        dy = new int[m+1];
+        System.out.println(main.solution(arr));
+    }
+
+    public int solution(int[] coin) {
+        Arrays.fill(dy, Integer.MAX_VALUE);
+        dy[0] = 0;
+        for (int i=0; i<n; i++) {
+            for (int j= coin[i]; j<=m; j++) {
+                dy[j] = Math.min(dy[j], dy[j-coin[i]]+1);
+            }
+        }
+        return dy[m];
+    }
+}
+```
+
+- dfs 로 접근하면 시간 복잡도 문제가 생긴다. DP 접근 필요
+- 목표 값 만큼 배열 생성 후 , 거스름돈 값을 적은 순으로 배열로 채워나간다. 
+- dy[j-coin[i]+1] 을 떠올리는게 중요
+
+
+
+
+
+
+

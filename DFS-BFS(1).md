@@ -390,6 +390,8 @@ public class Main {
 
 
 
+
+
 ## Graph
 
 - G(V, E)로 표현  (Vertex : 노드, Edge : 간선)
@@ -499,4 +501,73 @@ public class Main {
 ```
 
 
+
+### BFS/DFS
+
+```JAVA
+import java.util.*;
+
+public class Main {
+    static int[][] graph;
+    static int node, edge;
+    static boolean[] visited;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        node = sc.nextInt();
+        edge = sc.nextInt();
+        int start = sc.nextInt();
+        graph = new int[node+1][node+1];
+        for (int i=0; i<edge; i++) {
+            int start_node = sc.nextInt();
+            int end_node = sc.nextInt();
+            graph[start_node][end_node] = 1;
+            graph[end_node][start_node] = 1;
+        }
+        visited = new boolean[node+1];
+        dfs(start);
+        System.out.println();
+
+        visited = new boolean[node+1];
+        bfs(start);
+    }
+
+    private static void bfs(int start) {
+        visited[start] = true;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(start);
+        System.out.print(start+" ");
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            for (int i=1; i<graph.length; i++) {
+                if (graph[node][i] == 1 && !visited[i]){
+                    queue.offer(i);
+                    visited[i] = true;
+                    System.out.print(i+" ");
+                }
+            }
+        }
+    }
+
+    private static void dfs(int start) {
+        visited[start] = true;
+        System.out.print(start+" ");
+        if(start == graph.length) return;
+        else {
+            for (int i=1; i<graph.length; i++) {
+                if(graph[start][i] == 1 && !visited[i]) dfs(i);
+            }
+        }
+    }
+}
+[입력]
+4 5 1
+1 2
+1 3
+1 4
+2 4
+3 4
+[출력]
+1 2 4 3 //DFS 
+1 2 3 4  //BFS
+```
 

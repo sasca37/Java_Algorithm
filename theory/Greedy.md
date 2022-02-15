@@ -1,4 +1,14 @@
-## 회의실 배정
+## 탐욕 알고리즘 (Greedy)
+
+- 최적해를 구하는 데 사용되는 근시안적인 방법
+- 머릿속에 떠오르는 생각을 검증 없이 바로 구현하면 Greedy 접근
+
+- 동전이 (500, 400, 100) 있을 때 거스름돈이 800원인 상황에서 그리디 방식이라면 500원 1개, 100원 3개지만, 최적의 해는 400원 2개이다. **즉, 최적이라는 보장은 없기 때문에 제한적인 문제들에 적용**
+- Prime, Kruskal, Dijkstra 등 그래프 탐욕 기법 존재 
+
+
+
+### 회의실 배정
 
 ```java
 import java.util.*;
@@ -49,7 +59,7 @@ class Main {
 
 
 
-## 결혼식
+### 결혼식
 
 ```java
 import java.util.*;
@@ -104,7 +114,7 @@ class Main {
 
 
 
-## 최대수입스케쥴 (Priority Queue)
+### 최대수입스케쥴 (Priority Queue)
 
 ```java
 import java.util.*;
@@ -162,7 +172,7 @@ class Main {
 
 
 
-## 다익스트라 (Priority Queue)
+### 다익스트라 (Priority Queue)
 
 ```java
 import java.util.*;
@@ -229,7 +239,7 @@ class Main {
 
 
 
-## 친구인가 (Union & Find)
+### 친구인가 (Union & Find)
 
 ```java
 import java.util.*;
@@ -267,7 +277,7 @@ class Main {
 
 
 
-## 벽돌 쌓기 LIS (최장수열)
+### 벽돌 쌓기 LIS (최장수열)
 
 ```java
 import java.util.*;
@@ -326,7 +336,7 @@ class Main {
 
 
 
-## 냅색 알고리즘 (동전)
+### 냅색 알고리즘 (동전)
 
 ```java
 import java.util.*;

@@ -24,8 +24,7 @@ public class Main {
         int totalBit = 1<<N;
         long a; // 신맛
         long b; // 쓴맛
-        boolean chk;
-        for (int flag = 0; flag < totalBit; flag++) {
+        for (int flag = 1; flag < totalBit; flag++) {
             a = 1;
             b = 0;
             for (int i=0; i<N; i++) {
@@ -34,7 +33,7 @@ public class Main {
                     b += arr[i][1];
                 }
             }
-            if(flag != 0)answer = Math.min(answer, Math.abs(a-b));
+            answer = Math.min(answer, Math.abs(a-b));
         }
     }
 }

@@ -8,29 +8,28 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        arr = new int[N];
-        chk(0);
+        arr = new int[N+1];
+        backtracking(1);
         System.out.println(answer);
     }
 
-    private static void chk(int level) {
-        if (level == N) {
+    private static void backtracking(int level) {
+        if(!isAvailable(level-1)) return;
+
+        if (level == N+1) {
             answer++;
             return;
         }
 
-        for (int i=0; i<N; i++) {
+        for (int i = 1; i <= N; i++) {
             arr[level] = i;
-            if (isPossible(level)) {
-                chk(level+1);
-            }
+            backtracking(level+1);
         }
     }
 
-    private static boolean isPossible(int level) {
-        for (int i = 0; i < level; i++) {
-            if (arr[level] == arr[i]) return false;
-            if (Math.abs(level -i) == Math.abs(arr[level] - arr[i])) return false;
+    private static boolean isAvailable(int row) {
+        for (int i = 1; i < row; i++) {
+            if (arr[row] == arr[i] || row-i == Math.abs(arr[row]-arr[i])) return false;
         }
         return true;
     }

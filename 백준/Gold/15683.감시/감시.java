@@ -2,14 +2,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-
 public class Main {
     static int board[][], N,M;
+    static boolean[][] visited;
     static int[][] dummy;
     static ArrayList<CCTV> cctvs = new ArrayList<>();
-//    // 상 우 하 좌
-//    static int[] dx = {-1, 0, 1, 0};
-//    static int[] dy = {0, 1, 0, -1};
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
     static int answer = Integer.MAX_VALUE;
     static int[] cDirections;
     public static void main(String[] args) throws IOException {
@@ -23,20 +22,19 @@ public class Main {
             for (int j = 0; j < M; j++) {
                 int tmp = Integer.parseInt(st.nextToken());
                 board[i][j] = tmp;
-                if (1<= tmp && tmp <= 5) cctvs.add(new CCTV(i,j,tmp));
+                if (tmp!=0 && tmp != 6) cctvs.add(new CCTV(i,j,tmp));
             }
         }
         cDirections = new int[cctvs.size()];
-        backtracking(0);
+        permutation(0);
         System.out.println(answer);
     }
-    private static void backtracking(int level) {
+    private static void permutation(int level) {
         if (level == cctvs.size()) {
             dummy = new int[N][M];
+            visited = new boolean[N][M];
             for (int i=0; i<N; i++) {
-                for (int j=0; j<M; j++) {
-                    dummy[i][j] = board[i][j];
-                }
+                dummy[i] = Arrays.copyOf(board[i],M);
             }
             for (int i=0; i< cctvs.size(); i++) {
                 command(cDirections[i], cctvs.get(i).num, cctvs.get(i).x, cctvs.get(i).y);
@@ -46,7 +44,7 @@ public class Main {
         }
         for (int i=0; i<4; i++) {
             cDirections[level] = i;
-            backtracking(level+1);
+            permutation(level+1);
         }
     }
 
@@ -66,84 +64,29 @@ public class Main {
             }
         }
         else if (cNum == 3) {
-            if (d == 0) {
-                chkDirections[0] = true;
-                chkDirections[1] = true;
-            }
-            else if (d == 1) {
-                chkDirections[1] = true;
-                chkDirections[2] = true;
-            }
-            else if (d==2) {
-                chkDirections[2] = true;
-                chkDirections[3] = true;
-            }
-            else {
-                chkDirections[0] = true;
-                chkDirections[3] = true;
-            }
+            chkDirections[d % 4] = true;
+            chkDirections[(d+1) % 4] = true;
         }
         else if (cNum == 4) {
-            if (d == 0) {
-                chkDirections[3] = true;
-                chkDirections[0] = true;
-                chkDirections[1] = true;
-            }
-            else if (d == 1) {
-                chkDirections[0] = true;
-                chkDirections[1] = true;
-                chkDirections[2] = true;
-            }
-            else if (d == 2) {
-                chkDirections[3] = true;
-                chkDirections[2] = true;
-                chkDirections[1] = true;
-            }
-            else {
-                chkDirections[0] = true;
-                chkDirections[3] = true;
-                chkDirections[2] = true;
-            }
+            chkDirections[(3+d)%4] = true;
+            chkDirections[(d)%4] = true;
+            chkDirections[(1+d)%4] = true;
         }
-        else {
-            chkDirections[0] = true;
-            chkDirections[1] = true;
-            chkDirections[2] = true;
-            chkDirections[3] = true;
-        }
+        else Arrays.fill(chkDirections, true);
         changeBoard(chkDirections,x,y);
     }
 
     private static void changeBoard(boolean[] chk, int x, int y) {
         for (int t=0; t<4; t++) {
             if(!chk[t]) continue;
-            if (t == 0) {
-                for (int i=x; i>=0; i--) {
-                    if(dummy[i][y] == 6) break;
-                    else if (dummy[i][y] != 0) continue;
-                    else dummy[i][y] = -1;
-                }
-            }
-            else if (t == 1) {
-                for (int i=y; i<=M-1; i++) {
-                    if (dummy[x][i] == 6) break;
-                    else if (dummy[x][i] != 0) continue;
-                    else dummy[x][i] = -1;
-                }
-            }
-            else if (t == 2) {
-                for (int i=x; i<=N-1; i++) {
-                    if(dummy[i][y] == 6) break;
-                    else if (dummy[i][y] != 0) continue;
-                    else dummy[i][y] = -1;
-                }
-            }
-            else {
-                for (int i=y; i>=0; i--) {
-                    if (dummy[x][i] == 6) break;
-                    else if (dummy[x][i] != 0) continue;
-                    else dummy[x][i] = -1;
-                }
+            int lx = x, ly = y;
+            while(true) {
+                int nx = lx +dx[t];
+                int ny = ly +dy[t];
+                if (nx < 0 || ny < 0 || nx > N-1 || ny > M-1 || dummy[nx][ny] == 6 ) break;
+                dummy[nx][ny] = -1;
+                lx = nx;
+                ly = ny;
             }
         }
     }

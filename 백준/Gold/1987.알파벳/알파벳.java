@@ -7,7 +7,7 @@ public class Main {
     static int R, C;
     static int board[][];
     static int answer = 0;
-    static int[] visited = new int[26];
+    static boolean[] visited = new boolean[26];
     static int[] dx = {-1, 0, 1, 0};
     static int[] dy = {0, 1, 0, -1};
     public static void main(String[] args) throws IOException {
@@ -22,23 +22,18 @@ public class Main {
                 board[i][j] = word.charAt(j)-'A';
             }
         }
-        backtracking(0,0,0);
+        backtracking(0,0,1);
         System.out.println(answer);
     }
-
     private static void backtracking(int x, int y,int cnt){
-        if (visited[board[x][y]] == 1) {
-            answer = Math.max(answer, cnt);
-            return;
-        }
-
-        visited[board[x][y]] = 1;
+        answer = Math.max(answer, cnt);
+        visited[board[x][y]] = true;
         for (int i=0; i<4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
-            if (nx < 0 || ny < 0 || nx > R-1 || ny > C-1) continue;
+            if (nx < 0 || ny < 0 || nx > R-1 || ny > C-1 || visited[board[nx][ny]]) continue;
             backtracking(nx,ny,cnt+1);
         }
-        visited[board[x][y]] = 0;
+        visited[board[x][y]] = false;
     }
 }

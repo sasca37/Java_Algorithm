@@ -1,42 +1,43 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static int[][] graph;
-    static int node, edge;
-    static boolean[] visited;
+    static int ans,N;
+    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+        for (int i = 0; i <= N; i++) graph.add(new ArrayList<>());
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        node = sc.nextInt();
-        edge = sc.nextInt();
-        graph = new int[node+1][node+1];
-        visited = new boolean[node+1];
-        for (int i=0; i<edge; i++) {
-            int start_node = sc.nextInt();
-            int end_node = sc.nextInt();
-            graph[start_node][end_node] = 1;
-            graph[end_node][start_node] = 1;
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            graph.get(from).add(to);
+            graph.get(to).add(from);
         }
-        int answer = 0;
-        dfs(1,0);
-        for (int i=2; i<visited.length; i++) {
-            if(visited[i]) answer++;
-        }
-        System.out.println(answer);
+        bfs(1);
+        System.out.println(ans);
     }
 
-    private static void dfs(int start, int count) {
+    private static void bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[N+1];
+        queue.offer(start);
         visited[start] = true;
-        count++;
-        if(start == graph.length) return ;
-        else {
-            for(int i=1; i<graph.length; i++) {
-                if(graph[start][i] == 1 && !visited[i]){
-                    dfs(i,count);
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            for (int x : graph.get(vertex)) {
+                if(!visited[x]) {
+                    visited[x] = true;
+                    ans++;
+                    queue.offer(x);
                 }
             }
         }
     }
-
-
 }

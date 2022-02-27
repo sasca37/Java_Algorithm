@@ -20,8 +20,22 @@ public class Main {
             graph.get(from).add(to);
             graph.get(to).add(from);
         }
-        bfs(1);
+//        bfs(1);
+        boolean[] visited = new boolean[N+1];
+        visited[1] = true;
+        dfs(1,  visited);
+
         System.out.println(ans);
+    }
+
+    private static void dfs(int start, boolean[] visited) {
+        for (int x : graph.get(start)) {
+            if(!visited[x]) {
+                ans++;
+                visited[x] = true;
+                dfs(x, visited);
+            }
+        }
     }
 
     private static void bfs(int start) {

@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,17 +10,17 @@ public class Main {
         StringTokenizer st;
         int T = Integer.parseInt(br.readLine());
         while (T-- > 0) {
-            PriorityQueue<Integer> queue = new PriorityQueue<>();
             st = new StringTokenizer(br.readLine());
             int total = 0;
+            int min = Integer.MAX_VALUE;
             while(st.hasMoreTokens()) {
                 int tmp = Integer.parseInt(st.nextToken());
                 if (tmp % 2 == 0) {
-                    queue.offer(tmp);
+                    min = Math.min(min, tmp);
                     total += tmp;
                 }
             }
-            sb.append(total).append(" ").append(queue.poll()).append("\n");
+            sb.append(total).append(" ").append(min).append("\n");
         }
         System.out.println(sb);
     }

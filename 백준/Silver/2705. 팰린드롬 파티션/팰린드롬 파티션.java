@@ -11,9 +11,7 @@ public class Main {
         int[] dp = new int[1001];
         Arrays.fill(dp,1);
         dp[1] = 1;
-        dp[2] = 2;
-        dp[3] = 2;
-        for (int i=4; i<=1000; i++) {
+        for (int i=2; i<=1000; i++) {
             for (int j = 0; j < i; j++) {
                 if ((i-j) % 2 == 1)continue;
                 dp[i] += dp[(i - j) / 2];

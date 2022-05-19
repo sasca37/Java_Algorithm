@@ -23,14 +23,15 @@ public class Main {
             graph.get(to).add(new Point(from, weight));
         }
         boolean[] visited = new boolean[N+1];
+        visited[1] = true;
         dfs(1,0, visited);
         visited = new boolean[N+1];
+        visited[index] = true;
         dfs(index,0, visited);
         System.out.println(max);
     }
 
     private static void dfs(int node, int weight, boolean[] visited) {
-        visited[node] = true;
         if (weight > max) {
             max = weight;
             index = node;
@@ -38,6 +39,7 @@ public class Main {
 
         for (Point x : graph.get(node)) {
             if (!visited[x.node]) {
+                visited[node] = true;
                 dfs(x.node, weight + x.w, visited);
             }
         }

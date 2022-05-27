@@ -2,9 +2,11 @@ import java.util.*;
 
 class Solution {
     public boolean solution(String[] phone_book) {
-        Arrays.sort(phone_book);
-        for (int i = 0; i < phone_book.length - 1; i++) {
-            if(phone_book[i+1].startsWith(phone_book[i])) return false;
+        HashSet<String> hs = new HashSet<>(Arrays.asList(phone_book));
+        for (String s : phone_book) {
+            for (int j = 0; j < s.length(); j++) {
+                if (hs.contains(s.substring(0, j))) return false;
+            }
         }
         return true;
     }

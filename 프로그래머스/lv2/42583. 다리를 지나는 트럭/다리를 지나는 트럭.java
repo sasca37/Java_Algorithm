@@ -1,57 +1,55 @@
 import java.util.*;
 
 class Solution {
-    static int[] bridge;
     public int solution(int bridge_length, int weight, int[] truck_weights) {
-        int answer = 0;
-        Deque<Integer> deque = new ArrayDeque<>();
-
+        Deque<Truck> trucks = new ArrayDeque<>();
+        ArrayList<Truck> bridges= new ArrayList<>();
         for (int i = 0; i < truck_weights.length; i++) {
-            deque.offer(truck_weights[i]);
+            trucks.add(new Truck(truck_weights[i]));
         }
+        int time = 0;
+        int currentTotalWeight = 0;
+        while (!trucks.isEmpty()) {
+            time++;
+            Truck tmp = trucks.peekFirst();
 
-        bridge = new int[bridge_length];
+            if(bridges.size() != 0 && bridges.get(0).time == bridge_length) {
+                currentTotalWeight -= bridges.get(0).weight;
+                bridges.remove(0);
+            }
 
-        while (!deque.isEmpty()) {
-            answer++;
-            int truck = deque.peek();
-            changeBridge();
-            int currentWeight = getWeight();
-            if (currentWeight + truck <= weight && bridge[bridge_length-1] == 0) {
-                add(deque.pollFirst());
+            // 트럭을 넣을 수 있는 상황이라면
+            if (bridges.size() < bridge_length && currentTotalWeight + tmp.weight <= weight) {
+                currentTotalWeight += tmp.weight;
+                bridges.add(trucks.pollFirst());
+            }
+
+            // 다리에 있는 모든 트럭 이동
+            for (Truck x : bridges) {
+                x.move();
             }
         }
-        while(true) {
-            if(isAllClear()) {
-                break;
+
+        while (bridges.size() > 0) {
+            time++;
+            if(bridges.get(0).time == bridge_length) bridges.remove(0);
+            for (Truck x : bridges) {
+                x.move();
             }
-            answer++;
-            changeBridge();
         }
-        return answer;
+        return time;
     }
 
-    private static boolean isAllClear() {
-        for (int i = 0; i < bridge.length; i++) {
-            if (bridge[i] != 0) return false;
+    static class Truck {
+        int weight, time;
+
+        public Truck(int weight) {
+            this.weight = weight;
+            this.time = 0;
         }
-        return true;
-    }
 
-    private static void add(int truck) {
-        bridge[bridge.length-1] = truck;
-    }
-
-    private static void changeBridge() {
-        for (int i = 0; i < bridge.length - 1; i++) {
-            bridge[i] = bridge[i + 1];
+        public void move() {
+            this.time++;
         }
-        bridge[bridge.length-1] = 0;
-    }
-
-    private static int getWeight() {
-        int total = 0;
-        for (int x : bridge) total += x;
-        return total;
     }
 }

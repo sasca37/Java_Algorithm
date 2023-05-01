@@ -1,10 +1,10 @@
 # [unrated] 당구 연습 - 169198 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/169198) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/169198?language=javascript) 
 
 ### 성능 요약
 
-메모리: 82.2 MB, 시간: 0.98 ms
+메모리: 34 MB, 시간: 0.80 ms
 
 ### 구분
 

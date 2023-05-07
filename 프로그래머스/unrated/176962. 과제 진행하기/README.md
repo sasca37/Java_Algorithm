@@ -1,10 +1,10 @@
 # [unrated] 과제 진행하기 - 176962 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/176962) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/176962?language=javascript) 
 
 ### 성능 요약
 
-메모리: 79.8 MB, 시간: 6.16 ms
+메모리: 34.3 MB, 시간: 2.48 ms
 
 ### 구분
 

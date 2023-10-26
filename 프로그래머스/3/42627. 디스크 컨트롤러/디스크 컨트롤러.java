@@ -11,7 +11,7 @@ class Solution {
             }
         });
 
-PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+PriorityQueue<Job> pq = new PriorityQueue<>( (o1, o2) -> o1.time - o2.time );
 
         int curEndTime = 0; // 현재 종료 시간
 
@@ -20,19 +20,29 @@ PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
 
         while (idx < jobs.length) {
             while (i < jobs.length && jobs[i][0] <= curEndTime) {
-                pq.add(jobs[i++]);
+                pq.add(new Job(jobs[i][0], jobs[i][1]));
+                i++;
             }
             if(pq.isEmpty()) {
                 curEndTime = jobs[i][0];
             } else {
-                int[] tmp = pq.poll();
-                answer += tmp[1] + curEndTime - tmp[0];
-                curEndTime += tmp[1];
+                Job tmp = pq.poll();
+                answer += tmp.time + curEndTime - tmp.start;
+                curEndTime += tmp.time;
                 idx++;
             }
         }
 
 
         return answer/ jobs.length;
+    }
+     static class Job {
+        int start;
+        int time;
+        
+        public Job(int s, int t) {
+            this.start = s;
+            this.time = t;
+        }
     }
 }
